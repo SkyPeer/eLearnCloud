@@ -18,12 +18,9 @@ const App = () => (
   <div>
     <div
       className={"navigation"}
-      style={{
-        backgroundColor: "green",
-        flexDirection: "row",
-        display: "flex",
-        padding: 10
-      }}
+      // style={{
+      //   `padding: 10`
+      // }}
     >
       <nav>
         <Link to="/">Main</Link>
@@ -38,7 +35,7 @@ const App = () => (
 
     <div
       className={"routing"}
-      style={{ backgroundColor: "gray", width: "50%" }}
+      style={{ backgroundColor: "gray", width: "100%" }}
     >
       <Route exact path="/" component={Main} />
       <Route path="/dashboard" component={Dashboard} />
