@@ -2,49 +2,56 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter, Link, Route } from "react-router-dom";
 import "./index.css";
-import Main from "./App";
+import Main from "./Main";
 import Form from "./Form";
 import Analytics from "./Analytics";
 import * as serviceWorker from "./serviceWorker";
 
 // ReactDOM.render(<App />, document.getElementById("root"));
 
-const Dashboard = () => (
-  <div style={{ backgroundColor: "yellow", width: "auto" }}>Dashboard!</div>
-);
-const Dashboard2 = () => (
-  <div style={{ backgroundColor: "yellow", width: "auto" }}>Dashboard!2</div>
-);
+class App extends React.Component {
+  state = {
+    auth: true
+  };
 
-const App = () => (
-  <div>
-    <div
-      className={"navigation"}
-      // style={{
-      //   `padding: 10`
-      // }}
-    >
-      <nav>
-        <Link to="/">Main</Link>
-      </nav>
-      <nav>
-        <Link to="/Form">Main</Link>
-      </nav>
-      <nav>
-        <Link to="/Analytics">Analytics</Link>
-      </nav>
-    </div>
+  render() {
+    return (
+      <div>
+        <div className={"navigation"}>
+          <nav>
+            <Link to="/">Main</Link>
+          </nav>
+          <nav>
+            <Link to="/Form">Form</Link>
+          </nav>
+          <nav>
+            <Link to="/Analytics">Analytics</Link>
+          </nav>
+          <button onClick={() => this.setState({ mmm: "arghhhhh!" })}>
+            test
+          </button>
+        </div>
 
-    <div
-      className={"routing"}
-      style={{ backgroundColor: "gray", width: "100%" }}
-    >
-      <Route exact path="/" component={Main} />
-      <Route path="/Form" component={Form} />
-      <Route path="/Analytics" component={Analytics} />
-    </div>
-  </div>
-);
+        {this.state.auth ? (
+          <div
+            className={"routing"}
+            style={{ backgroundColor: "gray", width: "100%" }}
+          >
+            <Route
+              exact
+              path="/"
+              component={() => <Main mmm={this.state.mmm} />}
+            />
+            <Route path="/Form" component={Form} />
+            <Route path="/Analytics" component={() => <Analytics />} />
+          </div>
+        ) : (
+          <div>NEED AUTH</div>
+        )}
+      </div>
+    );
+  }
+}
 
 ReactDOM.render(
   <BrowserRouter>
