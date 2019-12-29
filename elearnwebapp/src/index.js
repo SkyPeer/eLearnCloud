@@ -11,7 +11,8 @@ import * as serviceWorker from "./serviceWorker";
 
 class App extends React.Component {
   state = {
-    auth: true
+    auth: true,
+    mmm: "777"
   };
 
   render() {
@@ -33,10 +34,7 @@ class App extends React.Component {
         </div>
 
         {this.state.auth ? (
-          <div
-            className={"routing"}
-            style={{ backgroundColor: "gray", width: "100%" }}
-          >
+          <div className={"routing"} style={{ width: "100%" }}>
             <Route
               exact
               path="/"
