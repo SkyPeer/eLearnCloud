@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter, Link, Route } from "react-router-dom";
+import { BrowserRouter, Link, Route, Redirect } from "react-router-dom";
 import "./index.css";
 import Main from "./Main";
 import Form from "./Form";
@@ -12,7 +12,19 @@ import * as serviceWorker from "./serviceWorker";
 class App extends React.Component {
   state = {
     auth: true,
-    mmm: "777"
+    mmm: "777",
+    userValid: false
+  };
+
+  submitUser = user => {
+    console.log(user);
+
+    if (user) {
+      this.setState({ userValid: true });
+    }
+    // if (this.state.toDashboard === true) {
+    //   return <Redirect to="/Analytics" />;
+    // }
   };
 
   render() {
@@ -25,9 +37,7 @@ class App extends React.Component {
           <nav>
             <Link to="/Form">Form</Link>
           </nav>
-          <nav>
-            <Link to="/Analytics">Analytics</Link>
-          </nav>
+          <nav>{/* <Link to="/Analytics">Analytics</Link> */}</nav>
           <button onClick={() => this.setState({ mmm: "arghhhhh!" })}>
             test
           </button>
@@ -35,12 +45,17 @@ class App extends React.Component {
 
         {this.state.auth ? (
           <div className={"routing"} style={{ width: "100%" }}>
+            {this.state.userValid && <Redirect to="/Analytics" />}
+
             <Route
               exact
               path="/"
               component={() => <Main mmm={this.state.mmm} />}
             />
-            <Route path="/Form" component={Form} />
+            <Route
+              path="/Form"
+              component={() => <Form submitUser={this.submitUser}></Form>}
+            />
             <Route path="/Analytics" component={() => <Analytics />} />
           </div>
         ) : (

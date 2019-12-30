@@ -6,7 +6,11 @@ class Form extends React.Component {
     user: {}
   };
 
-  changeUserHandler = (type, value) => {
+  changeUserHandler = (type, e) => {
+    const value = e.target.value;
+
+    console.log("changeUserHandler", type, "v", value);
+
     this.setState(prevState => ({
       user: {
         ...prevState.user,
@@ -27,18 +31,43 @@ class Form extends React.Component {
         >
           <h1>Заполинте форму</h1>
 
-          <input type="text" placeholder="Введите Имя" value={user.name} />
+          <input
+            type="text"
+            placeholder="Введите Имя"
+            value={user.name}
+            onChange={value => this.changeUserHandler("name", value)}
+          />
           <br />
 
-          <input type="text" placeholder="Возраст" value={user.age} />
+          <input
+            type="text"
+            placeholder="Возраст"
+            value={user.age}
+            onChange={value => this.changeUserHandler("age", value)}
+          />
           <br />
 
-          <input type="text" placeholder="Курс" value={user.course} />
+          <input
+            type="text"
+            placeholder="Курс"
+            value={user.course}
+            onChange={value => this.changeUserHandler("course", value)}
+          />
           <br />
 
-          <input type="text" placeholder="Группа" value={user.team} />
+          <input
+            type="text"
+            placeholder="Группа"
+            value={user.team}
+            onChange={value => this.changeUserHandler("team", value)}
+          />
           <br />
-          <button onClick={() => this.props.submitHandler()}>Отправить</button>
+          <button
+            onClick={() => this.props.submitUser(this.state.user)}
+            disabled={Object.keys(this.state.user).length < 3}
+          >
+            Отправить
+          </button>
         </form>
       </div>
     );
