@@ -16,12 +16,21 @@ class App extends React.Component {
     userValid: false
   };
 
-  submitUser = user => {
+  submitUser = async user => {
     console.log(user);
 
     if (user) {
-      this.setState({ userValid: true });
+      await this.setState({ userValid: true });
     }
+
+    const res = await fetch("http://localhost:3100/api/getNewSessionToken", {
+      method: "GET"
+    });
+    if (res.status == 200) {
+      const data = await res.json();
+      console.log("data = ", data);
+    }
+
     // if (this.state.toDashboard === true) {
     //   return <Redirect to="/Analytics" />;
     // }
