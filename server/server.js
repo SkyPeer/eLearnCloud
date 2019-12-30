@@ -8,7 +8,9 @@ const express = require("express"),
   helmet = require("helmet"),
   bodyParser = require("body-parser"),
   datetime = require("node-datetime");
+cors = require("cors");
 minimist = require("minimist");
+questions = require("./testArray");
 
 serverConfig = require("./config");
 
@@ -29,12 +31,38 @@ getSessionID = () => {
     .join("");
 };
 
-app.get("/api/getNewSessionToken", function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*"); //CORS Policy disabled
-  res.json({
-    token: getSessionID()
-  });
-});
+// // onlyGet
+// app.get("/api/getNewSessionToken", function(req, res, next) {
+//   res.header("Access-Control-Allow-Origin", "*"); //CORS Policy disabled
+//   res.json({
+//     token: getSessionID()
+//   });
+// });
+
+var whitelist = ["http://example1.com", "http://localhost:3000"];
+var corsOptions = {
+  origin: function(origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+      console.log("CORS -- 1");
+    } else {
+      console.log("CORS -- 2");
+      callback(new Error("Not allowed by CORS"));
+    }
+  }
+};
+
+app.post(
+  "/api/newsessioncreate",
+  bodyParser.json(),
+  cors(corsOptions),
+  function(req, res, next) {
+    console.log("/api/newsessioncreate", req.body);
+    res.json({
+      status: 200
+    });
+  }
+);
 
 function getCurrnetDateTime() {
   /*let date = new Date(); */
@@ -42,7 +70,7 @@ function getCurrnetDateTime() {
   return date;
   //return(date.getDate() + '/' + (date.getMonth()+1) + '/' + date.getFullYear() + ' ' + (date.getHours() + ':' + date.getMinutes()));
 }
-
+app.use(cors());
 app.use(helmet());
 app.use(compression());
 
