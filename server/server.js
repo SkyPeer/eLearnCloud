@@ -23,8 +23,8 @@ if (args.port) {
 // app.set("view engine", "jade");
 
 getSessionID = () => {
-  const sessionLength = 256;
-  return [...Array(sessionLength)]
+  const sessionIdLength = 256;
+  return [...Array(sessionIdLength)]
     .map(i => (~~(Math.random() * 36)).toString(36))
     .join("");
 };
