@@ -14,15 +14,22 @@ questions = require("./testArray");
 
 serverConfig = require("./config");
 
+testArray = require("./testArray");
+
 let args = minimist(process.argv.slice(2));
+
+app.use(cors());
+app.use(helmet());
+app.use(compression());
 
 if (args.port) {
   console.log("port was bind by args:", args.port);
   serverConfig.server.port = args.port;
 }
 
-// app.set("views", __dirname + "/build");
-// app.set("view engine", "jade");
+//--------------------------
+
+var sessions = [];
 
 getSessionID = () => {
   const sessionLength = 256;
@@ -30,6 +37,13 @@ getSessionID = () => {
     .map(i => (~~(Math.random() * 36)).toString(36))
     .join("");
 };
+
+function getCurrnetDateTime() {
+  /*let date = new Date(); */
+  let date = datetime.create();
+  return date;
+  //return(date.getDate() + '/' + (date.getMonth()+1) + '/' + date.getFullYear() + ' ' + (date.getHours() + ':' + date.getMinutes()));
+}
 
 // // onlyGet
 // app.get("/api/getNewSessionToken", function(req, res, next) {
@@ -39,12 +53,12 @@ getSessionID = () => {
 //   });
 // });
 
-var whitelist = ["http://example1.com", "http://localhost:3000"];
-var corsOptions = {
+const whitelist = ["http://example1.com", "http://localhost:3000"];
+const corsOptions = {
   origin: function(origin, callback) {
     if (whitelist.indexOf(origin) !== -1) {
       callback(null, true);
-      console.log("CORS -- 1");
+      // console.log("CORS -- 1");
     } else {
       console.log("CORS -- 2");
       callback(new Error("Not allowed by CORS"));
@@ -57,22 +71,43 @@ app.post(
   bodyParser.json(),
   cors(corsOptions),
   function(req, res, next) {
-    console.log("/api/newsessioncreate", req.body);
+    //console.log("/api/newsessioncreate", req.body);
     res.json({
-      status: 200
+      //status: 200,
+      sessionId: createSession(req.body)
     });
   }
 );
 
-function getCurrnetDateTime() {
-  /*let date = new Date(); */
-  let date = datetime.create();
-  return date;
-  //return(date.getDate() + '/' + (date.getMonth()+1) + '/' + date.getFullYear() + ' ' + (date.getHours() + ':' + date.getMinutes()));
+function createSession(user) {
+  const sessionId = getSessionID();
+  sessions.push({
+    id: sessionId,
+    user: user,
+    time: getCurrnetDateTime()._now
+  });
+
+  //console.log("sessions:", sessions);
+  return sessionId;
 }
-app.use(cors());
-app.use(helmet());
-app.use(compression());
+
+// onlyGet
+app.get("/api/getTests", function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*"); //CORS Policy disabled
+  res.json(testArray);
+});
+
+app.post("/api/setAnswers", bodyParser.json(), cors(corsOptions), function(
+  req,
+  res,
+  next
+) {
+  console.log("/api/setAnswers", req.body);
+  res.json({
+    //status: 200,
+    // sessionId: createSession(req.body)
+  });
+});
 
 // app.use("/public", express.static(path.join(__dirname, "public")));
 
