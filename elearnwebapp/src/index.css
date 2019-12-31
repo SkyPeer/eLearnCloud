@@ -35,6 +35,11 @@ html {
   padding: 0;
 }
 
+.question {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
 .navigation {
   width: 100%;
   display: flex;

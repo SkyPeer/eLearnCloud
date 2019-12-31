@@ -8,9 +8,6 @@ class Form extends React.Component {
 
   changeUserHandler = (type, e) => {
     const value = e.target.value;
-
-    console.log("changeUserHandler", type, "v", value);
-
     this.setState(prevState => ({
       user: {
         ...prevState.user,
