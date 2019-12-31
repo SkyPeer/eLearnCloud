@@ -39,13 +39,9 @@ class Tests extends React.Component {
   setAnswers = async () => {
     const res = await fetch("http://localhost:3100/api/setAnswers", {
       method: "POST",
-      // cache: "no-cache",
-      // credentials: "same-origin",
       headers: {
         "Content-Type": "application/json"
       },
-      // redirect: "follow", // manual, *follow, error
-      // referrer: "no-referrer", // no-referrer, *client
       body: JSON.stringify({
         answers: this.state.answers,
         sessionId: this.props.sessionId

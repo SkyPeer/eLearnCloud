@@ -56,7 +56,9 @@ class App extends React.Component {
           <nav>
             <Link to="/Form">Form</Link>
           </nav>
-          <nav>{/* <Link to="/Analytics">Analytics</Link> */}</nav>
+          <nav>
+            <Link to="/Analytics">Analytics</Link>
+          </nav>
         </div>
         <div className={"routing"} style={{ width: "100%" }}>
           {this.state.sessionId && <Redirect to="/Tests" />}
