@@ -5,7 +5,8 @@ class Tests extends React.Component {
   state = {
     tests: [],
     selectedOption: null,
-    answers: {}
+    answers: {},
+    result: null
   };
 
   componentDidMount = () => {
@@ -51,6 +52,8 @@ class Tests extends React.Component {
     if (res.status == 200) {
       const data = await res.json();
       console.log("resData:", data);
+      await this.setState({ result: data });
+
       // if (data.sessionId) {
       //   await this.setState({ sessionId: data.sessionId });
       // }
@@ -83,12 +86,32 @@ class Tests extends React.Component {
   render() {
     return (
       <div>
-        <form>
-          {this.state.tests.map((question, index) => (
-            <div key={index}>{this.getQuestion(question)}</div>
-          ))}
-        </form>
-        <button onClick={() => this.setAnswers()}>Отправить</button>
+        {!this.state.result ? (
+          <div>
+            <form>
+              {this.state.tests.map((question, index) => (
+                <div key={index}>{this.getQuestion(question)}</div>
+              ))}
+            </form>
+            <button onClick={() => this.setAnswers()}>Отправить</button>
+          </div>
+        ) : (
+          <div>
+            <b className="raiting">Оценка:</b>
+            {"  " + this.state.result.raiting}
+            <div>
+              {this.state.result.failedQuestions.map((question, index) => (
+                <div
+                  className="failedQuestion"
+                  key={index}
+                  style={{ color: "red" }}
+                >
+                  {" - " + question}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     );
   }

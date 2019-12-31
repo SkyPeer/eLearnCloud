@@ -7,7 +7,13 @@ class Form extends React.Component {
   };
 
   changeUserHandler = (type, e) => {
-    const value = e.target.value;
+    let value = "";
+
+    if (type == "name") {
+      value = e.target.value;
+    } else {
+      value = parseInt(e.target.value);
+    }
 
     this.setState(prevState => ({
       user: {

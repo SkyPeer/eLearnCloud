@@ -51,13 +51,13 @@ class App extends React.Component {
       <div>
         <div className={"navigation"}>
           <nav>
-            <Link to="/">Main</Link>
+            <Link to="/">Главная</Link>
           </nav>
           <nav>
-            <Link to="/Form">Form</Link>
+            <Link to="/Form">Авторизация</Link>
           </nav>
           <nav>
-            <Link to="/Analytics">Analytics</Link>
+            <Link to="/Analytics">Аналитика</Link>
           </nav>
         </div>
         <div className={"routing"} style={{ width: "100%" }}>
