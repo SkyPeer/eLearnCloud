@@ -102,12 +102,47 @@ app.post("/api/setAnswers", bodyParser.json(), cors(corsOptions), function(
   res,
   next
 ) {
-  console.log("/api/setAnswers", req.body);
-  res.json({
+  // console.log("/api/setAnswers", req.body);
+  res.json(
+    getRaitingHandler(req.body)
     //status: 200,
     // sessionId: createSession(req.body)
-  });
+  );
 });
+
+getRaitingHandler = data => {
+  const sessionId = data.sessionId;
+  let answers = Object.assign({}, data.answers);
+  let currentSession = {};
+
+  let failedQuestions = [];
+
+  sessions.forEach(session => {
+    if ((session.id = sessionId)) {
+      currentSession = session;
+    }
+  });
+
+  let raiting = 0;
+
+  //getRaiting
+  Object.keys(answers).forEach(questionId => {
+    if (answers[questionId] == testArray[questionId].correct) {
+      raiting = raiting + 1;
+    } else {
+      failedQuestions.push(testArray[questionId].question);
+      //console.log(testArray[questionId].question);
+    }
+  });
+
+  currentSession["answers"] = answers;
+  currentSession["raiting"] = raiting;
+  console.log("session", currentSession);
+  return {
+    raiting,
+    failedQuestions
+  };
+};
 
 // app.use("/public", express.static(path.join(__dirname, "public")));
 
