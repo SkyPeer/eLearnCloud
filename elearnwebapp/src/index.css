@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Abel&display=swap");
+@import url("https://fonts.googleapis.com/css?family=PT+Sans+Narrow&display=swap");
 
 body {
   box-sizing: border-box;
@@ -33,6 +33,11 @@ html {
   display: flex;
   flex-wrap: wrap;
   padding: 0;
+}
+
+.question {
+  margin-top: 15px;
+  margin-bottom: 15px;
 }
 
 .navigation {

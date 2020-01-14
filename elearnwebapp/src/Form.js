@@ -7,9 +7,13 @@ class Form extends React.Component {
   };
 
   changeUserHandler = (type, e) => {
-    const value = e.target.value;
+    let value = "";
 
-    console.log("changeUserHandler", type, "v", value);
+    if (type == "name") {
+      value = e.target.value;
+    } else {
+      value = parseInt(e.target.value);
+    }
 
     this.setState(prevState => ({
       user: {
@@ -33,7 +37,7 @@ class Form extends React.Component {
 
           <input
             type="text"
-            placeholder="Введите Имя"
+            placeholder="Имя в сети"
             value={user.name}
             onChange={value => this.changeUserHandler("name", value)}
           />
@@ -55,12 +59,12 @@ class Form extends React.Component {
           />
           <br />
 
-          <input
+          {/* <input
             type="text"
             placeholder="Группа"
             value={user.team}
             onChange={value => this.changeUserHandler("team", value)}
-          />
+          /> */}
           <br />
           <button
             onClick={() => this.props.submitUser(this.state.user)}
