@@ -37,7 +37,7 @@ class App extends React.Component {
       body: JSON.stringify(user) // тип данных в body должен соответвовать значению заголовка "Content-Type"
     });
 
-    if (res.status == 200) {
+    if (res.status === 200) {
       const data = await res.json();
       console.log("resData:", data);
       if (data.sessionId) {

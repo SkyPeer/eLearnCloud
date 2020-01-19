@@ -9,7 +9,7 @@ class Form extends React.Component {
   changeUserHandler = (type, e) => {
     let value = "";
 
-    if (type == "name") {
+    if (type === "name") {
       value = e.target.value;
     } else {
       value = parseInt(e.target.value);

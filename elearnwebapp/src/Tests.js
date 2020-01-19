@@ -30,7 +30,7 @@ class Tests extends React.Component {
     const res = await fetch("http://localhost:3100/api/getTests", {
       method: "GET"
     });
-    if (res.status == 200) {
+    if (res.status === 200) {
       const data = await res.json();
       console.log("TESTSDATA", data);
       this.setState({ tests: data });
@@ -49,7 +49,7 @@ class Tests extends React.Component {
       })
     });
 
-    if (res.status == 200) {
+    if (res.status === 200) {
       const data = await res.json();
       console.log("resData:", data);
       await this.setState({ result: data });
@@ -72,7 +72,7 @@ class Tests extends React.Component {
                   type="radio"
                   value={answer.id}
                   onChange={e => this.handleOptionChange(e, q.questionId)}
-                  checked={this.state.answers[q.questionId] == answer.id}
+                  checked={this.state.answers[q.questionId] === answer.id}
                 />
                 {answer.description}
               </label>
