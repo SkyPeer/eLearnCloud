@@ -60,12 +60,14 @@ const corsOptions = {
       callback(null, true);
       // console.log("CORS -- 1");
     } else {
-      console.log("CORS -- 2");
-      callback(new Error("Not allowed by CORS"));
+      //console.log("CORS -- 2", origin);
+      callback(null, true);
+      //callback(new Error("Not allowed by CORS"));
     }
   }
 };
 
+// --------------- CREATE SESSION
 app.post(
   "/api/newsessioncreate",
   bodyParser.json(),
@@ -76,6 +78,9 @@ app.post(
       //status: 200,
       sessionId: createSession(req.body)
     });
+    // console.log("---------------------------------");
+    // console.log("ACTIVE SESSIONS:", sessions.length);
+    // console.log("---------------------------------");
   }
 );
 
@@ -91,18 +96,19 @@ function createSession(user) {
   return sessionId;
 }
 
-// onlyGet
+// --------------- GET TEST
 app.get("/api/getTests", function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*"); //CORS Policy disabled
   res.json(testArray);
 });
 
+// --------------- SET ANSWERS
 app.post("/api/setAnswers", bodyParser.json(), cors(corsOptions), function(
   req,
   res,
   next
 ) {
-  // console.log("/api/setAnswers", req.body);
+  //console.log("/api/setAnswers", req.body);
   res.json(
     getRaitingHandler(req.body)
     //status: 200,
@@ -137,7 +143,7 @@ getRaitingHandler = data => {
 
   currentSession["answers"] = answers;
   currentSession["raiting"] = raiting;
-  console.log("session", currentSession);
+  console.log("session", sessions.length);
   return {
     raiting,
     failedQuestions
@@ -148,10 +154,11 @@ getRaitingHandler = data => {
 
 //app.use("/build", express.static(path.join(__dirname, "build")));
 
-app.use("/static", express.static(path.join(__dirname, "build/static")));
-app.use("", (req, res, next) => {
-  res.sendFile("./build/index.html", { root: __dirname });
-});
+// app.use("/static", express.static(path.join(__dirname, "build/static")));
+
+// app.use("", (req, res, next) => {
+//   res.sendFile("./build/index.html", { root: __dirname });
+// });
 
 server.listen(serverConfig.server.port, function() {
   console.log(
