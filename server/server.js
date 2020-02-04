@@ -13,6 +13,9 @@ minimist = require("minimist");
 questions = require("./testArray");
 
 serverConfig = require("./config");
+dbcConfig = require("./dbconfig");
+
+console.log("host", dbcConfig.host);
 
 testArray = require("./testArray");
 
