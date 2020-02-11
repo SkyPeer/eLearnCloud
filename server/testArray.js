@@ -47,7 +47,7 @@ module.exports = [
       },
       {
         id: 2,
-        description: "FTP"
+        description: "HTTPS"
       },
       {
         id: 3,
@@ -55,10 +55,10 @@ module.exports = [
       },
       {
         id: 4,
-        description: "HTTPS"
+        description: "FTP"
       }
     ],
-    correct: 4
+    correct: 2
   },
   {
     questionId: 3,
@@ -89,13 +89,13 @@ module.exports = [
     answers: [
       {
         id: 1,
-        description: "Транспортный"
+        description: "Прикладной"
       },
       {
         id: 2,
-        description: "Прикладной"
+        description: "Транспортный"
       }
     ],
-    correct: 2
+    correct: 1
   }
 ];

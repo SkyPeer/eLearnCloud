@@ -8,7 +8,11 @@ let answers = {};
 let testData = [];
 
 function getRandom(min, max) {
-  return parseInt(Math.random() * (max - min) + min);
+  //console.log("min", min);
+
+  return parseInt(Math.floor(Math.random() * max) + min);
+
+  //return parseInt(Math.random() * (max - min) + min);
 }
 
 updateAnswerObjects = () => {
@@ -74,27 +78,31 @@ getUser = () => {
 getAnswers = () => {
   let answers = {};
   testArray.forEach(q => {
-    answers[q.questionId] = getRandom(0, q.answers.length - 1);
+    answers[q.questionId] = getRandom(1, q.answers.length - 1);
   });
+
+  console.log("answers", answers);
+
   return answers;
 };
 
-createTestModel = async () => {
-  let _answers = {};
-  let testModel = {
-    user: {
-      name: fakeUsers[getRandom(0, fakeUsers.length - 1)].name,
-      age: getRandom(20, 30),
-      course: getRandom(1, 4)
-    }
-  };
-  testArray.forEach(q => {
-    _answers[q.questionId] = getRandom(0, q.answers.length - 1);
-  });
-  testModel["answers"] = _answers;
+// FIXME willBeDeprecated!
+// createTestModel = async () => {
+//   let _answers = {};
+//   let testModel = {
+//     user: {
+//       name: fakeUsers[getRandom(0, fakeUsers.length - 1)].name,
+//       age: getRandom(20, 30),
+//       course: getRandom(1, 4)
+//     }
+//   };
+//   testArray.forEach(q => {
+//     _answers[q.questionId] = getRandom(0, q.answers.length - 1);
+//   });
+//   testModel["answers"] = _answers;
 
-  testData.push(testModel);
-};
+//   testData.push(testModel);
+// };
 
 foo = async () => {
   const user = getUser();

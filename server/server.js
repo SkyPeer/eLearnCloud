@@ -111,7 +111,7 @@ app.post("/api/setAnswers", bodyParser.json(), cors(corsOptions), function(
   res,
   next
 ) {
-  //console.log("/api/setAnswers", req.body);
+  console.log("/api/setAnswers", req.body);
   res.json(
     getRaitingHandler(req.body)
     //status: 200,
