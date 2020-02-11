@@ -117,7 +117,7 @@ foo = async () => {
 };
 
 start = async () => {
-  for (var i = 0; i < 1024; i++) {
+  for (var i = 0; i < 5000; i++) {
     await foo();
   }
 };

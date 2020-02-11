@@ -4,22 +4,40 @@ const express = require("express"),
   app = express(),
   server = http.createServer(app),
   compression = require("compression"),
-  // mongoose = require("mongoose"),
   helmet = require("helmet"),
   bodyParser = require("body-parser"),
   datetime = require("node-datetime");
 cors = require("cors");
 minimist = require("minimist");
 questions = require("./testArray");
+mongoose = require("mongoose");
 
 serverConfig = require("./config");
-dbcConfig = require("./dbconfig");
-
-console.log("host", dbcConfig.host);
-
+dbConfig = require("./dbconfig");
+dbProviders = require("./dbproviders");
 testArray = require("./testArray");
 
 let args = minimist(process.argv.slice(2));
+
+const db = dbConfig;
+
+mongoose
+  .connect(`mongodb://${db.host}:${db.port}/${db.dbname}`, {
+    useNewUrlParser: true,
+    useFindAndModify: true
+  })
+  .then(() => {
+    console.log("-------------------");
+    console.log("mongodb has started");
+    console.log("-------------------");
+  })
+  .catch(err => {
+    console.log("-------------------");
+    console.log(err);
+    console.log("-------------------");
+  });
+
+mongoose.Promise = global.Promise;
 
 app.use(cors());
 app.use(helmet());
@@ -31,6 +49,32 @@ if (args.port) {
 }
 
 //--------------------------
+const testModel = new mongoose.Schema({
+  sessionId: String,
+  name: String,
+  age: Number,
+  course: Number,
+  answers: Object,
+  raiting: Number
+});
+
+let TestSchema = mongoose.model("tests", testModel);
+
+insertInDB = async data => {
+  if (data) {
+    const { name, age, course } = data.user;
+    await TestSchema.create({
+      sessionId: data.id,
+      name,
+      age,
+      course,
+      answers: data.answers,
+      raiting: data.raiting
+    });
+    console.log("dataWasInserted");
+    return true;
+  }
+};
 
 var sessions = [];
 
@@ -106,20 +150,21 @@ app.get("/api/getTests", function(req, res, next) {
 });
 
 // --------------- SET ANSWERS
-app.post("/api/setAnswers", bodyParser.json(), cors(corsOptions), function(
-  req,
-  res,
-  next
-) {
-  console.log("/api/setAnswers", req.body);
-  res.json(
-    getRaitingHandler(req.body)
-    //status: 200,
-    // sessionId: createSession(req.body)
-  );
-});
+app.post(
+  "/api/setAnswers",
+  bodyParser.json(),
+  cors(corsOptions),
+  async function(req, res, next) {
+    //console.log("/api/setAnswers", req.body);
+    res.json(
+      await getRaitingHandler(req.body)
+      //status: 200,
+      // sessionId: createSession(req.body)
+    );
+  }
+);
 
-getRaitingHandler = data => {
+getRaitingHandler = async data => {
   const sessionId = data.sessionId;
   let answers = Object.assign({}, data.answers);
   let currentSession = {};
@@ -146,7 +191,9 @@ getRaitingHandler = data => {
 
   currentSession["answers"] = answers;
   currentSession["raiting"] = raiting;
-  console.log("session", sessions.length);
+
+  await insertInDB(currentSession);
+
   return {
     raiting,
     failedQuestions
