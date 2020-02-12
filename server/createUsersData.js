@@ -10,7 +10,7 @@ function getRandom(min, max) {
 createExportData = () => {
   USERS.forEach(e => {
     const user = {
-      name: e.name,
+      name: "#" + e.name,
       age: getRandom(20, 25),
       course: getRandom(1, 4)
     };
