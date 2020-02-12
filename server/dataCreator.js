@@ -1,7 +1,7 @@
 //DataCreator testLib
 const fetch = require("node-fetch");
 const fs = require("fs");
-const fakeUsers = require("../../testData/fakeUsers.json");
+const fakeUsers = require("../../testData/exportData.json");
 const testArray = require("./testArray");
 
 let answers = {};
