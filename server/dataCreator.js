@@ -1,7 +1,7 @@
 //DataCreator testLib
 const fetch = require("node-fetch");
 const fs = require("fs");
-const fakeUsers = require("../../testData/exportData.json");
+const usersArray = require("../../testData/exportData.json");
 const testArray = require("./testArray");
 
 let answers = {};
@@ -68,11 +68,13 @@ setAnswers = async (answers, sessionId) => {
 };
 
 getUser = () => {
-  return {
-    name: fakeUsers[getRandom(0, fakeUsers.length - 1)].name,
-    age: getRandom(20, 30),
-    course: getRandom(1, 4)
-  };
+  // const {name, course, age} = usersArray[getRandom(0, fakeUsers.length - 1)]
+
+  return usersArray[getRandom(0, usersArray.length - 1)];
+
+  // name: fakeUsers[getRandom(0, fakeUsers.length - 1)].name,
+  // age: getRandom(20, 30),
+  // course: getRandom(1, 4)
 };
 
 getAnswers = () => {
