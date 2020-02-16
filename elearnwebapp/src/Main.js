@@ -2,70 +2,107 @@ import React, { Component } from "react";
 import CanvasJSReact from "./assets/canvasjs.react";
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
-class ScatterChart extends Component {
+class App extends Component {
+  constructor() {
+    super();
+    this.toggleDataSeries = this.toggleDataSeries.bind(this);
+  }
+  toggleDataSeries(e) {
+    if (typeof e.dataSeries.visible === "undefined" || e.dataSeries.visible) {
+      e.dataSeries.visible = false;
+    } else {
+      e.dataSeries.visible = true;
+    }
+    this.chart.render();
+  }
   render() {
     const options = {
-      theme: "dark2",
+      theme: "light2",
       animationEnabled: true,
-      zoomEnabled: true,
       title: {
-        text: "Ice Cream Sales vs Temperature"
+        text: "Active Users vs Server CPU Utilization"
       },
       axisX: {
-        title: "Temperature (in °C)",
-        suffix: "°C",
-        crosshair: {
-          enabled: true,
-          snapToDataPoint: true
-        }
+        title: "Active Users"
       },
       axisY: {
-        title: "Sales",
-        includeZero: false,
-        crosshair: {
-          enabled: true,
-          snapToDataPoint: true
-        }
+        title: "CPU Utilization",
+        suffix: "%"
+      },
+      legend: {
+        cursor: "pointer",
+        itemclick: this.toggleDataSeries
       },
       data: [
         {
           type: "scatter",
-          markerSize: 15,
-          toolTipContent: "<b>Temperature: </b>{x}°C<br/><b>Sales: </b>{y}",
+          name: "Server 1",
+          markerType: "triangle",
+          showInLegend: true,
+          toolTipContent:
+            '<span style="color:#4F81BC ">{name}</span><br>Active Users: {x}<br>CPU Utilization: {y}%',
           dataPoints: [
-            { x: 14.2, y: 215 },
-            { x: 12.9, y: 175 },
-            { x: 16.4, y: 325 },
-            { x: 26.9, y: 635 },
-            { x: 32.5, y: 464 },
-            { x: 22.1, y: 522 },
-            { x: 19.4, y: 412 },
-            { x: 25.1, y: 614 },
-            { x: 34.9, y: 374 },
-            { x: 28.7, y: 625 },
-            { x: 23.4, y: 544 },
-            { x: 31.4, y: 502 },
-            { x: 40.8, y: 262 },
-            { x: 37.4, y: 312 },
-            { x: 42.3, y: 202 },
-            { x: 39.1, y: 302 },
-            { x: 17.2, y: 200 }
+            { x: 100, y: 10 },
+            { x: 150, y: 15 },
+            { x: 190, y: 17 },
+            { x: 250, y: 19 },
+            { x: 310, y: 21 },
+            { x: 400, y: 25 },
+            { x: 500, y: 40 },
+            { x: 510, y: 50 },
+            { x: 600, y: 30 },
+            { x: 700, y: 35 },
+            { x: 800, y: 40 },
+            { x: 900, y: 45 },
+            { x: 1000, y: 47 },
+            { x: 1100, y: 55 },
+            { x: 1230, y: 51 },
+            { x: 1300, y: 60 },
+            { x: 1330, y: 65 },
+            { x: 1400, y: 70 },
+            { x: 1450, y: 71 },
+            { x: 1500, y: 69 }
+          ]
+        },
+        {
+          type: "scatter",
+          name: "Server 2",
+          showInLegend: true,
+          markerType: "cross",
+          toolTipContent:
+            '<span style="color:#C0504E ">{name}</span><br>Active Users: {x}<br>CPU Utilization: {y}%',
+          dataPoints: [
+            { x: 100, y: 25 },
+            { x: 150, y: 35 },
+            { x: 190, y: 35 },
+            { x: 250, y: 40 },
+            { x: 310, y: 45 },
+            { x: 400, y: 42 },
+            { x: 500, y: 57 },
+            { x: 510, y: 67 },
+            { x: 600, y: 40 },
+            { x: 700, y: 46 },
+            { x: 800, y: 50 },
+            { x: 900, y: 60 },
+            { x: 1000, y: 66 },
+            { x: 1100, y: 79 },
+            { x: 1230, y: 60 },
+            { x: 1300, y: 75 },
+            { x: 1330, y: 80 },
+            { x: 1400, y: 82 },
+            { x: 1450, y: 88 },
+            { x: 1500, y: 87 }
           ]
         }
       ]
     };
-
     return (
       <div>
-        <h1>React Scatter Chart</h1>
-        <CanvasJSChart
-          options={options}
-          /* onRef={ref => this.chart = ref} */
-        />
+        <CanvasJSChart options={options} onRef={ref => (this.chart = ref)} />
         {/*You can get reference to the chart instance as shown above using onRef. This allows you to access all chart properties and methods*/}
       </div>
     );
   }
 }
 
-export default ScatterChart;
+export default App;
