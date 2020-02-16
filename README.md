@@ -1,4 +1,4 @@
 # eLearnCloud
 Front: ReactJS/Redux
 
-Back : NodeJS/ExpressJS 
+Back : NodeJS/ExpressJS/Mongoose/MongoDB
