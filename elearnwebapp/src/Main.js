@@ -49,7 +49,7 @@ class ScatterChart extends Component {
             { x: 37.4, y: 312 },
             { x: 42.3, y: 202 },
             { x: 39.1, y: 302 },
-            { x: 17.2, y: 408 }
+            { x: 17.2, y: 200 }
           ]
         }
       ]
