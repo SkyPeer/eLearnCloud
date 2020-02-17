@@ -55,19 +55,21 @@ const testModel = new mongoose.Schema({
   age: Number,
   course: Number,
   answers: Object,
-  raiting: Number
+  raiting: Number,
+  semester: Number
 });
 
 let TestSchema = mongoose.model("tests", testModel);
 
 insertInDB = async data => {
   if (data) {
-    const { name, age, course } = data.user;
+    const { name, age, course, semester } = data.user;
     await TestSchema.create({
       sessionId: data.id,
       name,
       age,
       course,
+      semester,
       answers: data.answers,
       raiting: data.raiting
     });
