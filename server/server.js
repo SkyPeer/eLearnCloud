@@ -166,6 +166,55 @@ app.post(
   }
 );
 
+app.get("/api/analytics", function(req, res, next) {
+  TestSchema.find(async function(err, testResultData) {
+    if (err) return next(err);
+    // await res.json(testResultData);
+    // getAnalyticsData(testResultData);
+    res.json(getAnalyticsData(testResultData));
+  });
+});
+
+getAnalyticsData = data => {
+  let results = {};
+
+  let analyticsData = [];
+
+  data.forEach(testResult => {
+    if (results[testResult.semester]) {
+      let arr = results[testResult.semester];
+      arr.push(testResult.raiting);
+      results[testResult.semester] = arr;
+    } else {
+      let arr = [];
+      arr.push(testResult.raiting);
+      results[testResult.semester] = arr;
+    }
+  });
+
+  //average
+  averageRaiting = raitigs => {
+    return (
+      raitigs.reduce((partial_sum, a) => partial_sum + a, 0) / raitigs.length
+    );
+  };
+
+  let keys = Object.keys(results);
+
+  keys.forEach(semester => {
+    results[semester] = averageRaiting(results[semester]);
+  });
+
+  Object.keys(results).forEach(item => {
+    analyticsData.push({
+      x: parseInt(item),
+      y: results[item]
+    });
+  });
+
+  return analyticsData;
+};
+
 getRaitingHandler = async data => {
   const sessionId = data.sessionId;
   let answers = Object.assign({}, data.answers);

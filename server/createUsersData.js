@@ -8,7 +8,7 @@ function getRandom(min, max) {
 }
 
 getLearnSession = () => {
-  const course = getRandom(1, 4);
+  const course = getRandom(1, 6);
 
   getSemester = () => {
     if (course === 1) {
@@ -22,6 +22,9 @@ getLearnSession = () => {
     }
     if (course === 4) {
       return getRandom(7, 9);
+    }
+    if (course === 5) {
+      return getRandom(9, 11);
     }
   };
 
