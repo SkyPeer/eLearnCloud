@@ -17,6 +17,8 @@ dbConfig = require("./dbconfig");
 dbProviders = require("./dbproviders");
 testArray = require("./testArray");
 
+tensorflowAnalytics = require("./tensorflow");
+
 let args = minimist(process.argv.slice(2));
 
 const db = dbConfig;
@@ -171,14 +173,19 @@ app.get("/api/analytics", function(req, res, next) {
     if (err) return next(err);
     // await res.json(testResultData);
     // getAnalyticsData(testResultData);
-    res.json(getAnalyticsData(testResultData));
+    res.json(await getAnalyticsData(testResultData));
   });
 });
 
-getAnalyticsData = data => {
+getAnalyticsData = async data => {
   let results = {};
 
   let analyticsData = [];
+
+  let dataForAnalytics = {
+    trainX: [],
+    trainY: []
+  };
 
   data.forEach(testResult => {
     if (results[testResult.semester]) {
@@ -210,9 +217,13 @@ getAnalyticsData = data => {
       x: parseInt(item),
       y: results[item]
     });
+    dataForAnalytics["trainX"].push(parseInt(item));
+    dataForAnalytics["trainY"].push(results[item]);
   });
 
-  return analyticsData;
+  const predictedPoints = await tensorflowAnalytics(dataForAnalytics);
+
+  return { analyticsData, predictedPoints };
 };
 
 getRaitingHandler = async data => {
