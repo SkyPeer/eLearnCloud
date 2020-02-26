@@ -177,6 +177,15 @@ app.get("/api/analytics", function(req, res, next) {
   });
 });
 
+app.get("/api/train", function(req, res, next) {
+  TestSchema.find(async function(err, testResultData) {
+    if (err) return next(err);
+    // await res.json(testResultData);
+    // getAnalyticsData(testResultData);
+    res.json(await train(testResultData));
+  });
+});
+
 getAnalyticsData = async data => {
   let results = {};
 
@@ -221,7 +230,56 @@ getAnalyticsData = async data => {
     dataForAnalytics["trainY"].push(results[item]);
   });
 
-  const predictedPoints = await tensorflowAnalytics(dataForAnalytics);
+  const predictedPoints = await tensorflowAnalytics.getTFdata(dataForAnalytics);
+
+  return { analyticsData, predictedPoints };
+};
+
+train = async data => {
+  let results = {};
+
+  let analyticsData = [];
+
+  let dataForAnalytics = {
+    trainX: [],
+    trainY: []
+  };
+
+  data.forEach(testResult => {
+    if (results[testResult.semester]) {
+      let arr = results[testResult.semester];
+      arr.push(testResult.raiting);
+      results[testResult.semester] = arr;
+    } else {
+      let arr = [];
+      arr.push(testResult.raiting);
+      results[testResult.semester] = arr;
+    }
+  });
+
+  //average
+  averageRaiting = raitigs => {
+    return (
+      raitigs.reduce((partial_sum, a) => partial_sum + a, 0) / raitigs.length
+    );
+  };
+
+  let keys = Object.keys(results);
+
+  keys.forEach(semester => {
+    results[semester] = averageRaiting(results[semester]);
+  });
+
+  Object.keys(results).forEach(item => {
+    analyticsData.push({
+      x: parseInt(item),
+      y: results[item]
+    });
+    dataForAnalytics["trainX"].push(parseInt(item));
+    dataForAnalytics["trainY"].push(results[item]);
+  });
+
+  const predictedPoints = await tensorflowAnalytics.train(dataForAnalytics);
 
   return { analyticsData, predictedPoints };
 };

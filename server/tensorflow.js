@@ -50,7 +50,34 @@ function predict(x) {
 
 // const predictionsBefore = predict(tf.tensor1d(trainX));
 
-module.exports = async function(data) {
+function loss(prediction, labels) {
+  //subtracts the two arrays & squares each element of the tensor then finds the mean.
+  const error = prediction
+    .sub(labels)
+    .square()
+    .mean();
+  return error;
+}
+
+let a = 0;
+
+module.exports.train = async function train(data) {
+  const { trainX, trainY } = data;
+  const learningRate = 0.005;
+  const optimizer = tf.train.sgd(learningRate);
+
+  optimizer.minimize(function() {
+    const predsYs = predict(tf.tensor1d(trainX));
+    console.log(predsYs);
+    stepLoss = loss(predsYs, tf.tensor1d(trainY));
+    console.log(stepLoss.dataSync()[0]);
+    return stepLoss;
+  });
+  const optimzedData = await this.getTFdata(data);
+  return optimzedData;
+};
+
+module.exports.getTFdata = async function getTFdata(data) {
   const { trainX, trainY } = data;
 
   const predictionsBefore = predict(tf.tensor1d(trainX));
@@ -67,7 +94,9 @@ module.exports = async function(data) {
     predictedPoints.push({ x: trainX[i], y: predictedData[i] });
   }
 
-  console.log("predictedPoints", predictedPoints);
+  a = a + 1;
+
+  console.log("predictedPoints", predictedPoints, " -- counter", a);
   return predictedPoints;
 };
 

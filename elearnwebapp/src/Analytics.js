@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Graph from "./Analytics2";
 import "./App.css";
 import CanvasJSReact from "./assets/canvasjs.react";
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
@@ -25,11 +26,19 @@ class Analytics extends Component {
   }
 
   componentDidMount = () => {
-    this.getTests();
+    this.getAnalyticsData();
   };
 
-  getTests = async () => {
+  getAnalyticsData = async () => {
     const res = await fetch("http://localhost:3100/api/analytics", {
+      method: "GET"
+    });
+    const { analyticsData, predictedPoints } = await res.json();
+    this.setState({ analyticsData, predictedPoints });
+  };
+
+  getTrainingData = async () => {
+    const res = await fetch("http://localhost:3100/api/train", {
       method: "GET"
     });
     const { analyticsData, predictedPoints } = await res.json();
@@ -47,6 +56,7 @@ class Analytics extends Component {
   render() {
     const options = {
       theme: "light2",
+      exportEnabled: true,
       animationEnabled: true,
       title: {
         text: "Средний рейтинг"
@@ -56,7 +66,7 @@ class Analytics extends Component {
       },
       axisY: {
         title: "Рейтинг",
-        suffix: "%"
+        suffix: ""
       },
       legend: {
         cursor: "pointer",
@@ -69,7 +79,7 @@ class Analytics extends Component {
           markerType: "triangle",
           showInLegend: true,
           toolTipContent:
-            '<span style="color:#4F81BC ">{name}</span><br>Active Users: {x}<br>CPU Utilization: {y}%',
+            '<span style="color:#4F81BC ">{name}</span><br>Active Users: {x}<br>Средняя оценка',
           dataPoints: this.state.analyticsData
         },
         {
@@ -78,7 +88,7 @@ class Analytics extends Component {
           showInLegend: true,
           markerType: "cross",
           toolTipContent:
-            '<span style="color:#C0504E ">{name}</span><br>Active Users: {x}<br>CPU Utilization: {y}%',
+            '<span style="color:#C0504E ">{name}</span><br>{x}<br>Прогнозируемая оценка',
           dataPoints: this.state.predictedPoints
         }
       ]
@@ -87,6 +97,19 @@ class Analytics extends Component {
       <div>
         <CanvasJSChart options={options} onRef={ref => (this.chart = ref)} />
         {/*You can get reference to the chart instance as shown above using onRef. This allows you to access all chart properties and methods*/}
+        <div>
+          <button
+            onClick={() => {
+              this.getTrainingData();
+            }}
+          >
+            Оптимизация
+          </button>
+        </div>
+        <br />
+        <div>
+          <Graph />
+        </div>
       </div>
     );
   }
